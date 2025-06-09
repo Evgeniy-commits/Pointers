@@ -1,24 +1,48 @@
-#include<iostream>
+ï»¿#include<iostream>
 using namespace std;
 
 void FillRand(int arr[], const int n);
 void Print(int arr[], const int n);
-void PushBack(int arr[], int n);
-void PushFront(int arr[], int n);
-void Insert(int arr[], int n);
+int* PushBack(int arr[], int& n, const int value);
+int* PushFront(int arr[], int& n, const int value);
+int* pop_back(int arr[], int& n);
+int* pop_front(int arr[], int& n);
+int* Insert(int arr[], int& n, const int value, const int index);
+int* Delete(int arr[], int& n, const int index);
+
+
 
 void main()
 {
 	setlocale(LC_ALL, "");
-	int n;
-	cout << "Ââåäèòå ðàçìåð ìàññèâà: "; cin >> n;
-	int* arr = new int[n]; 
+	int n, value, index;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð¼Ð°ÑÑÐ¸Ð²Ð°: "; cin >> n;
+	int* arr = new int[n];
 	FillRand(arr, n);
 	Print(arr, n);
-	PushBack(arr, n);
-	PushFront(arr, n);
-	Insert(arr, n);
-	
+
+	/*cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾: "; cin >> value;
+	arr = PushBack(arr, n, value);
+	Print(arr, n);
+
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾: "; cin >> value;
+	arr = PushFront(arr, n, value);
+	Print(arr, n);
+
+	arr = pop_back(arr, n);
+	Print(arr, n);
+
+	arr = pop_front(arr, n);
+	Print(arr, n);*/
+
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾: "; cin >> value;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð½Ð´ÐµÐºÑ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼Ð¾Ð³Ð¾ Ñ‡Ð¸ÑÐ»Ð°: "; cin >> index;
+	arr = Insert(arr, n, value, index);
+	Print(arr, n);
+
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð½Ð´ÐµÐºÑ ÑƒÐ´Ð°Ð»ÑÐµÐ¼Ð¾Ð³Ð¾ Ñ‡Ð¸ÑÐ»Ð°: "; cin >> index;
+	arr = Delete(arr, n, index);
+	Print(arr, n);
 
 	delete[] arr;
 }
@@ -27,7 +51,7 @@ void FillRand(int arr[], const int n)
 {
 	for (int i = 0; i < n; i++)
 	{
-		*(arr + i) = rand() % 100; 
+		*(arr + i) = rand() % 100;
 	}
 }
 
@@ -35,54 +59,83 @@ void Print(int arr[], const int n)
 {
 	for (int i = 0; i < n; i++)
 	{
-		cout << arr[i] << "\t"; 
+		cout << arr[i] << "\t";
 	}
 	cout << endl;
 }
 
-void PushBack(int arr[], int n)
+int* PushBack(int arr[], int& n, const int value)
 {
-	n++;
-	int* arr1 = new int[n];
-	int value;
-	cout << "Ââåäèòå äîáàâëÿåìîå ÷èñëî: "; cin >> value;
-	for (int i = 0; i < n - 1; i++)
-	{
-		arr1[i] = arr[i];
-	}
-	arr1[n - 1] = value;
-	Print(arr1, n);
-	delete[] arr1;
-}
-void PushFront(int arr[], int n)
-{
-	n++;
-	int* arr2 = new int[n];
-	int value;
-	cout << "Ââåäèòå äîáàâëÿåìîå ÷èñëî: "; cin >> value;
-	arr2[0] = value;
-	for (int i = 0; i < n - 1; i++)
-	{
-		arr2[i + 1] = arr[i];
-	}
-	Print(arr2, n);
-	delete[] arr2;
-}
-void Insert(int arr[], int n)
-{
-	n++;
-	int* arr3 = new int[n];
-	int value;
-	int index;
-	cout << "Ââåäèòå äîáàâëÿåìîå ÷èñëî: "; cin >> value;
-	cout << "Ââåäèòå èíäåêñ ýëåìåíòà: "; cin >> index;
-	
+	int* buffer = new int[n + 1];
 	for (int i = 0; i < n; i++)
 	{
-		i < index ? arr3[i] = arr[i] :
-		i == index ? arr3[index] = value :
-		i > index ? arr3[i] = arr[i - 1] : 0;
+		buffer[i] = arr[i];
 	}
-	Print(arr3, n);
-	delete[] arr3;
+	delete[] arr;
+	arr = buffer;
+	buffer = nullptr;
+	arr[n] = value;
+	n++;
+	return arr;
+}
+
+int* PushFront(int arr[], int& n, const int value)
+{
+	int* buffer = new int[n + 1];
+	for (int i = 0; i < n; i++)
+	{
+		buffer[i + 1] = arr[i];
+	}
+	delete[] arr;
+	buffer[0] = value;
+	n++;
+	return buffer;
+}
+
+int* pop_back(int arr[], int& n)
+{
+	int* buffer = new int[--n];
+	for (int i = 0; i < n; i++)
+	{
+		buffer[i] = arr[i];
+	}
+	delete[] arr;
+	return buffer;
+}
+
+int* pop_front(int arr[], int& n)
+{
+	int* buffer = new int[--n];
+	for (int i = 0; i < n; i++)
+	{
+		buffer[i] = arr[i + 1];
+	}
+	delete[] arr;
+	return buffer;
+}
+
+int* Insert(int arr[], int& n, const int value, const int index)
+{
+	int* buffer = new int[n + 1];
+	for (int i = 0; i <= n; i++)
+	{
+		i < index ? buffer[i] = arr[i] :
+		i == index ? buffer[index] = value :
+		i > index ? buffer[i] = arr[i - 1] : 0;
+	}
+	delete[] arr;
+	n++;
+	return buffer;
+}
+
+int* Delete(int arr[], int& n, const int index)
+{
+	int* buffer = new int[--n];
+	for (int i = 0; i < n; i++)
+	{
+		i < index ? buffer[i] = arr[i] :
+		i >= index ? buffer[i] = arr[i + 1] : 0;
+	}
+	delete[] arr;
+	return buffer;
 }
