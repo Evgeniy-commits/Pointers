@@ -1,4 +1,4 @@
-#include <ctime>  
+﻿#include <ctime>  
 #include <iostream>  
 #include <cstdlib>  
 using namespace std;
@@ -21,8 +21,7 @@ void main()
 		(arr[i] % 2 == 0) ? m++ : l++;
 	int* even = new int[m];
 	int* odd = new int[l];
-	
-	
+		
 	int j = 0;
 	int k = 0;
 	for (int i = 0; i < n; i++)
