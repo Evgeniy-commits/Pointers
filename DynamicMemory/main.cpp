@@ -8,7 +8,7 @@ int* PushFront(int arr[], int& n, const int value);
 int* pop_back(int arr[], int& n);
 int* pop_front(int arr[], int& n);
 int* Insert(int arr[], int& n, const int value, const int index);
-int* Delete(int arr[], int& n, const int index);
+int* Erase(int arr[], int& n, const int index);
 
 
 
@@ -41,7 +41,7 @@ void main()
 	Print(arr, n);
 
 	cout << "Введите индекс удаляемого числа: "; cin >> index;
-	arr = Delete(arr, n, index);
+	arr = Erase(arr, n, index);
 	Print(arr, n);
 
 	delete[] arr;
@@ -119,22 +119,20 @@ int* Insert(int arr[], int& n, const int value, const int index)
 	int* buffer = new int[n + 1];
 	for (int i = 0; i <= n; i++)
 	{
-		i < index ? buffer[i] = arr[i] :
-		i == index ? buffer[index] = value :
-		i > index ? buffer[i] = arr[i - 1] : 0;
+		i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
 	}
 	delete[] arr;
+	buffer[index] = value;
 	n++;
 	return buffer;
 }
 
-int* Delete(int arr[], int& n, const int index)
+int* Erase(int arr[], int& n, const int index)
 {
 	int* buffer = new int[--n];
 	for (int i = 0; i < n; i++)
 	{
-		i < index ? buffer[i] = arr[i] :
-		i >= index ? buffer[i] = arr[i + 1] : 0;
+		i < index ? buffer[i] = arr[i] : buffer[i] = arr[i + 1];
 	}
 	delete[] arr;
 	return buffer;
