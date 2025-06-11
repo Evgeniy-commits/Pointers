@@ -1,8 +1,10 @@
 ﻿#include<iostream>
 using namespace std;
-
+using std::cout;
 #define tab  "\t";
 
+int** Allocate(const int rows, const int cols);
+void Clear(int** arr, const int rows);
 void FillRand(int arr[], const int n, int minRand = 0, int maxRand = 100);
 void FillRand(int** arr, const int rows, const int cols, int minRand = 0, int maxRand = 100);
 void Print(int arr[], const int n);
@@ -14,6 +16,8 @@ int* pop_front(int arr[], int& n);
 int* Insert(int arr[], int& n, const int value, const int index);
 int* Erase(int arr[], int& n, const int index);
 int** push_row_back(int** arr, int& rows, const int cols);
+int** push_row_front(int** arr, int& rows, const int cols);
+int** insert_row(int** arr, int& rows, const int cols, int index);
 void push_col_back(int** arr, const int rows, int& cols);
 
 //#define DYNAMIC_MEMORY_1
@@ -60,39 +64,57 @@ void main()
 #endif // DYNAMIC_MEMORY_1
 
 #ifdef DYNAMIC_MEMORY_2
-	int rows, cols;
+	int rows, cols, index;
 	cout << "Введите количество строк: "; cin >> rows;
 	cout << "Введите количество столбцов: "; cin >> cols;
-
-	// Создаем массив указателей
-	int** arr = new int* [rows];
-
-	//Выделяем память под строки
-	for (int i = 0; i < rows; i++)
-	{
-		arr[i] = new int[cols];
-	}
-
+	cout << "\tИСХОДНЫЙ МАССИВ" << endl;
+	int** arr{nullptr};
+	arr = Allocate(rows, cols);
 	FillRand(arr, rows, cols);
 	Print(arr, rows, cols);
 
+	cout << "\tВСТАВИТЬ СТРОКУ В КОНЦЕ МАССИВА" << endl;
 	arr = push_row_back(arr, rows, cols);
 	FillRand(arr[rows - 1], cols, 100, 1000);
 	Print(arr, rows, cols);
 
+	cout << "\tВСТАВИТЬ СТРОКУ В НАЧАЛЕ МАССИВА" << endl;
+	arr = push_row_front(arr, rows, cols);
+	FillRand(arr[0], cols, 100, 1000);
+	Print(arr, rows, cols);
+
+	cout << "\tВСТАВИТЬ СТРОКУ ПО ИНДЕКСУ" << endl;
+	cout << "Введите индекс вставляемой строки: "; cin >> index;
+	arr = insert_row(arr, rows, cols, index);
+	FillRand(arr[index], cols, 100, 1000);
+	Print(arr, rows, cols);
+
+	cout << "\tВСТАВИТЬ СТОЛБЕЦ В КОНЦЕ МАССИВА" << endl;
 	push_col_back(arr, rows, cols);
 	for (int i = 0; i < rows; i++) arr[i][cols - 1] = rand() % 1000;
 	Print(arr, rows, cols);
 
-	//Сначала удаляются строки
+	Clear(arr, rows);
+#endif // DYNAMIC_MEMORY_2
+}
+
+int** Allocate(const int rows, const int cols)
+{
+	int** arr = new int* [rows] {};
+
+	for (int i = 0; i < rows; i++)
+	{
+		arr[i] = new int[cols] {};
+	}
+	return arr;
+}
+void Clear(int** arr, const int rows)
+{
 	for (int i = 0; i < rows; i++)
 	{
 		delete[] arr[i];
 	}
-	//потом массив указателей
 	delete[] arr;
-
-#endif // DYNAMIC_MEMORY_2
 }
 
 void FillRand(int arr[], const int n, int minRand, int maxRand)
@@ -219,6 +241,30 @@ int** push_row_back(int** arr, int& rows, const int cols)
 	}
 	delete[] arr;
 	buffer[rows] = new int[cols] {};
+	rows++;
+	return buffer;
+}
+int** push_row_front(int** arr, int& rows, const int cols)
+{
+	int** buffer = new int* [rows + 1];
+	for (int i = 0; i < rows; i++)
+	{
+		buffer[i + 1] = arr[i];
+	}
+	delete[] arr;
+	buffer[0] = new int[cols] {};
+	rows++;
+	return buffer;
+}
+int** insert_row(int** arr, int& rows, const int cols, int index)
+{
+	int** buffer = new int* [rows + 1];
+	for (int i = 0; i <= rows; i++)
+	{
+		i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
+	}
+	delete[] arr;
+	buffer[index] = new int[cols] {};
 	rows++;
 	return buffer;
 }
