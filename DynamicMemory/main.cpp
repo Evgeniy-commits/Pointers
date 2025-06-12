@@ -4,7 +4,7 @@ using std::cout;
 using std::cin;
 #define tab  "\t";
 
-int** Allocate(int** arr, const int rows, const int cols);
+void Allocate(int**& arr, const int rows, const int cols);
 void Clear(int** arr, const int rows);
 void FillRand(int arr[], const int n, int minRand = 0, int maxRand = 100);
 void FillRand(int** arr, const int rows, const int cols, int minRand = 0, int maxRand = 100);
@@ -78,7 +78,7 @@ void main()
 	cout << "Введите количество столбцов: "; cin >> cols;
 	cout << "\tИСХОДНЫЙ МАССИВ" << endl;
 	int** arr{nullptr};
-	arr = Allocate(arr, rows, cols);
+	Allocate(arr, rows, cols);
 	FillRand(arr, rows, cols);
 	Print(arr, rows, cols);
 
@@ -144,7 +144,7 @@ void main()
 #endif // DYNAMIC_MEMORY_2
 }
 
-int** Allocate(int** arr, const int rows, const int cols)
+void Allocate(int**& arr, const int rows, const int cols)
 {
 	arr = new int* [rows] {};
 
@@ -152,7 +152,6 @@ int** Allocate(int** arr, const int rows, const int cols)
 	{
 		arr[i] = new int[cols] {};
 	}
-	return arr;
 }
 void Clear(int** arr, const int rows)
 {
