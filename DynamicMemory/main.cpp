@@ -273,7 +273,7 @@ int** push_row_front(int** arr, int& rows, const int cols)
 int** insert_row(int** arr, int& rows, const int cols, int index)
 {
 	int** buffer = new int* [rows + 1];
-	for (int i = 0; i <= rows; i++)	buffer[i < index ? i : i + 1] = arr[i];//i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
+	for (int i = 0; i < rows; i++)	buffer[i <= index ? i : i + 1] = arr[i]; //i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
 	delete[] arr;
 	buffer[index] = new int[cols] {};
 	rows++;
