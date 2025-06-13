@@ -5,7 +5,7 @@ using std::cin;
 #define tab  "\t";
 
 void Allocate(int**& arr, const int rows, const int cols);
-void Clear(int** arr, const int rows);
+void Clear(int**& arr, const int rows, const int cols = 0);
 void FillRand(int arr[], const int n, int minRand = 0, int maxRand = 100);
 void FillRand(int** arr, const int rows, const int cols, int minRand = 0, int maxRand = 100);
 void Print(int arr[], const int n);
@@ -140,7 +140,7 @@ void main()
 	erase_col(arr, rows, cols, index);
 	Print(arr, rows, cols);
 
-	Clear(arr, rows);
+	Clear(arr, rows, cols);
 #endif // DYNAMIC_MEMORY_2
 }
 
@@ -153,10 +153,12 @@ void Allocate(int**& arr, const int rows, const int cols)
 		arr[i] = new int[cols] {};
 	}
 }
-void Clear(int** arr, const int rows)
+void Clear(int**& arr, const int rows, const int cols)
 {
 	for (int i = 0; i < rows; i++)	delete[] arr[i];
 	delete[] arr;
+	// Зануляем указатель на массив
+	arr = nullptr;
 }
 
 void FillRand(int arr[], const int n, int minRand, int maxRand)
@@ -271,7 +273,7 @@ int** push_row_front(int** arr, int& rows, const int cols)
 int** insert_row(int** arr, int& rows, const int cols, int index)
 {
 	int** buffer = new int* [rows + 1];
-	for (int i = 0; i <= rows; i++)	i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
+	for (int i = 0; i <= rows; i++)	buffer[i < index ? i : i + 1] = arr[i];//i <= index ? buffer[i] = arr[i] : buffer[i] = arr[i - 1];
 	delete[] arr;
 	buffer[index] = new int[cols] {};
 	rows++;
@@ -280,6 +282,7 @@ int** insert_row(int** arr, int& rows, const int cols, int index)
 
 int** pop_row_back(int** arr, int& rows, const int cols)
 {
+	delete[] arr[rows - 1];
 	int** buffer = new int* [--rows];
 	for (int i = 0; i < rows; i++) buffer[i] = arr[i];
 	delete[] arr;
@@ -287,6 +290,7 @@ int** pop_row_back(int** arr, int& rows, const int cols)
 }
 int** pop_row_front(int** arr, int& rows, const int cols)
 {
+	delete[] arr[0];
 	int** buffer = new int* [--rows];
 	for (int i = 0; i < rows; i++)	buffer[i] = arr[i + 1];
 	delete[] arr;
@@ -294,6 +298,7 @@ int** pop_row_front(int** arr, int& rows, const int cols)
 }
 int** erase_row(int** arr, int& rows, const int cols, int index)
 {
+	delete[] arr[index];
 	int** buffer = new int* [--rows];
 	for (int i = 0; i < rows; i++)	i < index ? buffer[i] = arr[i] : buffer[i] = arr[i + 1];
 	delete[] arr;
